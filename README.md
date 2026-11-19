@@ -1,64 +1,92 @@
-# DoBao · Baobuddy
+# DoBao
 
-เว็บภาษาไทยสำหรับบันทึกสุขภาพและกิจวัตร คง HTML/CSS/JavaScript เดิม ใช้ Google Login ผ่าน Supabase Auth, ฐานข้อมูล Supabase และ API ร่วมวัน AI ไม่มีกล้อง/สแกนอาหาร และไม่มีคำตอบ AI จำลองเมื่อบริการล่ม
+DoBao is a Thai-language web app for people living with, or at risk of, type 2 diabetes. It keeps a daily record of meals, activity, medication and health measurements, builds a simple weekly routine, and includes Baobuddy, an assistant that answers questions about the user's own records and about general health.
 
-## สถานะสำคัญ
+This repository contains the web client and the serverless API that sits in front of it. Record storage, parsing, scheduling and the language model integration live in the companion service, [AIDoBao](https://github.com/tawan-ptk/AIDoBao).
 
-โค้ดพร้อมสำหรับ **ตั้งค่าและทดสอบ staging** ยังไม่ควรเปิดรับข้อมูลผู้ป่วยจริง จนกว่ารายการใน [DEPLOYMENT.md](docs/DEPLOYMENT.md) จะครบ
+Live deployment: <https://dobaohealth.vercel.app>
 
-ตั้ง Supabase (URL, publishable key, secret key) ใน `.env.local` และเปิด Google provider ใน Supabase Auth ตาม [SUPABASE_LOGIN.md](docs/SUPABASE_LOGIN.md) ไฟล์ secret ไม่อยู่ใน static build การตรวจ `setup:check` ไม่ใช่การพิสูจน์ Google Login และ RLS end-to-end ซึ่งต้องทดสอบด้วยบัญชีจริง
+## Features
 
-## เปิดในเครื่อง
+- **Daily log.** Meals, activity, medication, sleep and measurements (glucose, weight, blood pressure). Entries can be typed as free text, such as "lunch was chicken rice, walked 20 minutes in the evening", and are split into separate records for review. Nothing is saved until the user confirms the draft.
+- **Fast manual entry.** Structured forms that save directly, without a model call.
+- **History by day.** Any past day can be opened, edited as a new version, or deleted.
+- **Weekly routine.** A seven-day plan built from activities the user picks. Medication and appointment times are fixed and never moved automatically.
+- **Baobuddy chat.** Summaries of the user's own records, meal suggestions filtered by allergies and conditions, and health answers grounded in curated sources or a search limited to trusted health sites. Every answer lists its sources.
+- **Shareable summaries.** A one-day or multi-day summary is drawn to a canvas in the browser and shared through the system share sheet. No image is uploaded.
+- **Consent first.** Storing health data and using the assistant are separate permissions. Both can be withdrawn at any time.
 
-เปิดโหมดทดสอบ local ให้แล้วตามคำขอ ใช้ข้อมูลสมมติเท่านั้น ยังต้อง Google Login และเลือกอนุญาตเอง แต่ไม่ต้องกรอกประกาศ production ตอนนี้ ดูข้อจำกัดและวิธีปิดโหมดใน [SUPABASE_LOGIN.md](docs/SUPABASE_LOGIN.md#5-โหมดทดสอบในเครื่อง) และ [DEPLOYMENT.md](docs/DEPLOYMENT.md)
+## Architecture
 
-ต้องใช้ Node.js 22 ขึ้นไป การเปิด `index.html` โดยตรงหรือ Live Server ไม่เพียงพอแล้ว เพราะต้องมี backend และ bundle ของ Supabase SDK
+```text
+Browser ── Supabase Auth (Google OAuth, PKCE) ──▶ access token
+   │
+   ▼
+/api  (Vercel Node function)
+   ├─ verifies the token with Supabase Auth on every request
+   ├─ enforces consent, same-origin checks and per-user rate limits
+   ├─ Supabase Postgres (RLS): accounts, consent history, daily goals,
+   │                           read-only projection of health records
+   └─ AIDoBao service: source of truth for health records, drafts,
+                       plans and the assistant
+```
+
+The browser never talks to AIDoBao directly. The API attaches a server-side credential and a stable per-user identifier, so the client cannot read or write records that belong to another account. After each confirmed change the API copies a read-only projection of the user's records into Supabase, which keeps the dashboard fast.
+
+## Tech stack
+
+| Layer | Choice |
+| --- | --- |
+| Client | Plain HTML, CSS and JavaScript, bundled with esbuild |
+| Hosting | Vercel (static files and a Node 22 function, region `sin1`) |
+| Auth | Supabase Auth with Google as the only provider |
+| Database | Supabase Postgres with row-level security |
+| Tests | Node's built-in test runner with jsdom |
+
+There is no front-end framework. The UI is a single page with bottom-sheet dialogs on phones and modal dialogs on desktop.
+
+## Getting started
+
+Requirements: Node.js 22 and a Supabase project with the Google provider turned on.
 
 ```sh
 npm ci
-npm run dev
+cp .env.example .env.local   # fill in the values; never commit this file
+npm run dev                  # http://localhost:3000
 ```
 
-เปิด `http://localhost:3000` ตั้งค่า `.env.local` ตาม `.env.example` ห้ามใส่ server secrets ลง `script.js`, HTML, Git หรือแชต
+Database migrations are in `supabase/migrations/` and should be applied in order. The setup guides in `docs/` (written in Thai) cover the Google Cloud client, Supabase URL configuration and the Vercel environment.
 
 ```sh
-npm run check
-npm run setup:check
+npm test               # unit and UI tests
+npm run check          # syntax check, tests and production build
+npm run setup:check    # verifies configuration without printing secrets
 ```
 
-คำสั่งนี้ตรวจ syntax, รันทดสอบ และ build เฉพาะไฟล์สาธารณะไป `dist/` ไม่ได้พิสูจน์ว่าตั้งค่า Google/Supabase production สำเร็จ
+`npm run build` copies only an explicit allow-list of public files into `dist/`. The build fails if anything else appears there.
 
-`setup:check` ตรวจสิ่งที่ยังขาดพร้อมทดสอบการเชื่อมต่อแบบอ่านอย่างเดียว โดยไม่พิมพ์ secret และไม่อ่านข้อมูลผู้ป่วย
+## Project layout
 
-คู่มือทดลองแต่ละหน้าและรายการก่อนเผยแพร่อยู่ใน [HANDOFF.md](docs/HANDOFF.md) ก่อน deploy ใช้ `npm run release:check` ซึ่งจะไม่ผ่านเมื่อยังเปิด local test mode หรือการตั้งค่า production ไม่ครบ
-
-## โครงสร้างข้อมูล
-
-```text
-Browser (Supabase Auth JWT จาก Google) → /api (Supabase Auth verify + consent)
-                ├─ Supabase: บัญชี ชื่อ ความยินยอม น้ำดื่ม เป้าหมาย
-                └─ AI gateway → FastAPI/MLX บน Mac: ต้นฉบับบันทึกสุขภาพ
-                                      ↓ อ่านหลังยืนยัน
-                       Supabase: สำเนาสุขภาพแบบ read-only projection
-```
-
-**สำคัญ:** ตามเอกสารส่งต่อของโมเดล ข้อมูลสุขภาพต้นฉบับอยู่ในบริการ AI สำเนาอยู่ Supabase ไม่ใช่ย้ายฐานต้นฉบับทั้งหมดมา Supabase เว็บจะไม่บันทึกสุขภาพแยกสองระบบเอง ถ้าต้องการให้ Supabase เป็นฐานสุขภาพต้นฉบับเพียงแห่งเดียว ต้องปรับสัญญาและฐานเก็บของบริการ AI เพิ่มเติมก่อน
-
-ไม่มี AI วินิจฉัยโรค/สั่งยา ระบบแสดงข้อมูลที่กรอก ค่าพลังงานเป็นค่าประมาณจากแหล่งอ้างอิง ข้อมูลที่ไม่ทราบแสดงว่าไม่ทราบ ไม่แทนด้วยศูนย์ และทุกการเพิ่ม/แก้ไข/ลบต้องตรวจร่างแล้วกดยืนยัน
-
-## ไฟล์หลัก
-
-| ไฟล์ | หน้าที่ |
+| Path | Purpose |
 | --- | --- |
-| `index.html`, `style.css` | หน้าจอไทย responsive เมนู Home กลางด้านล่าง หน้าบัญชีและ consent |
-| `script.js`, `client-data.js` | flow ร่าง/ตรวจ/ยืนยัน ประวัติ แชต น้ำดื่ม เป้าหมาย กราฟ |
-| `api/index.js`, `server/supabase-auth.mjs` | ตรวจ Supabase token จับคู่ UUID ตรวจ consent และ proxy |
-| `auth-client.js` | Google redirect (PKCE), จดจำการล็อกอินใน localStorage, refresh token และ logout |
-| `server/ai.mjs`, `server/security.mjs` | เชื่อม AI ฝั่ง server จำกัดปลายทาง origin และ owner |
-| `supabase/migrations/001_dobao.sql` | ตาราง RLS RPC rate limit/concurrency/projection |
-| `supabase/migrations/004_cleanup_recovery.sql`, `005_projection_barrier.sql` | ติดตามคำขอลบที่ค้างและป้องกันซิงก์เก่านำข้อมูลที่ลบแล้วกลับมา |
-| `vercel.json` | build, Node function, HTTPS security headers |
-| `tests/` | unit, security และ DOM flow tests ด้วย fixture |
-| `scripts/smoke-ai.mjs` | ทดสอบ API จริงบน Mac ด้วย owner ทดสอบและไม่ยืนยันบันทึก |
+| `index.html`, `style.css` | Markup and styles for every screen |
+| `script.js`, `client-data.js` | UI state, drafts, history, chat, charts and share images |
+| `auth-client.js` | Google sign-in, session persistence and token refresh |
+| `boot.js` | Shows a launch screen before first paint while a saved session resumes |
+| `api/index.js` | The single API entry point: auth, consent, routing and projection sync |
+| `server/` | Supabase auth helpers, security checks, AI client and privacy notice |
+| `supabase/migrations/` | Tables, RLS policies and RPC functions |
+| `tests/` | Node test suites for the API and the UI |
+| `docs/` | Deployment, login and support guides |
 
-รายละเอียด endpoint และข้อจำกัดดู [INTEGRATION.md](docs/INTEGRATION.md) ผลตรวจดู [TESTING.md](docs/TESTING.md)
+## Security and privacy
+
+- Secrets live only in `.env.local` and the Vercel environment. They are never bundled or committed.
+- The API accepts requests only from the configured origin and responds with `Cache-Control: no-store, private`.
+- Writes require an explicit confirmation step, and confirmations are idempotent.
+- Chat history is stored on the device, scoped to the signed-in account, and cleared on sign-out.
+- Questions sent to the language model carry no account details or stored records.
+
+## Status
+
+DoBao is a student project and has not been clinically validated. It does not diagnose conditions or change medication, and its answers should not replace advice from a care team.
