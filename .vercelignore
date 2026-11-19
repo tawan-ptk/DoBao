@@ -1,0 +1,14 @@
+# Defense in depth: deploy application code, never development secrets.
+.env
+.env.*
+.git
+.codex
+.agents
+node_modules
+coverage
+*.log
+*serviceAccount*.json
+*service-account*.json
+*firebase-adminsdk*.json
+.secrets/
+.credentials/

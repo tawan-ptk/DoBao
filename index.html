@@ -1,0 +1,2108 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0f766e" />
+    <meta
+      name="description"
+      content="DoBao ช่วยบันทึกสุขภาพและจัดการกิจวัตรประจำวัน พร้อมผู้ช่วย Baobuddy"
+    />
+    <title>DoBao — ดูแลสุขภาพประจำวัน</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="apple-mobile-web-app-title" content="DoBao" />
+    <meta name="application-name" content="DoBao" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="boot.js"></script>
+  </head>
+  <body>
+    <!-- ชุดไอคอน SVG ใช้ซ้ำในเมนูและการ์ด ช่วยให้เว็บเปิดได้โดยไม่ต้องพึ่งไลบรารี -->
+    <svg class="svg-sprite" aria-hidden="true">
+      <symbol id="icon-home" viewBox="0 0 24 24">
+        <path
+          d="M3 10.8 12 3l9 7.8v9a1.2 1.2 0 0 1-1.2 1.2H4.2A1.2 1.2 0 0 1 3 19.8z"
+        />
+        <path d="M9 21v-7h6v7" />
+      </symbol>
+      <!-- อาหาร: ชามข้าวมีไอน้ำ -->
+      <symbol id="icon-food" viewBox="0 0 24 24">
+        <path d="M3.5 12.5h17a8.5 6.6 0 0 1-17 0Z" />
+        <path d="M9 21h6M12 19.1V21" />
+        <path d="M8.6 3.5c-.9 1.1.9 2.1 0 3.4M12 3c-.9 1.1.9 2.1 0 3.4M15.4 3.5c-.9 1.1.9 2.1 0 3.4" />
+      </symbol>
+      <!-- กิจกรรม: คนกำลังวิ่ง -->
+      <symbol id="icon-activity" viewBox="0 0 24 24">
+        <circle cx="14.6" cy="4.2" r="1.9" />
+        <path d="M13.3 8 11 13.3" />
+        <path d="m11 13.3 3.6 2.3-1 5" />
+        <path d="m11 13.3-2.4 3.9-4.1.8" />
+        <path d="m12.7 9.3 3.5 1.9 2.4-.9" />
+        <path d="M12.7 9.3 9.4 8.5 7.2 10.7" />
+      </symbol>
+      <!-- ยา: แคปซูล -->
+      <symbol id="icon-pill" viewBox="0 0 24 24">
+        <g transform="rotate(-45 12 12)">
+          <rect x="3.5" y="8.3" width="17" height="7.4" rx="3.7" />
+          <path d="M12 8.3v7.4" />
+          <path d="M6.6 10.6h2.6" opacity=".55" />
+        </g>
+      </symbol>
+      <symbol id="icon-heart" viewBox="0 0 24 24">
+        <path
+          d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"
+        />
+        <path d="M7 12h3l1-3 2 6 1-3h3" />
+      </symbol>
+      <symbol id="icon-drop" viewBox="0 0 24 24">
+        <path d="M12 3S6 10 6 15a6 6 0 0 0 12 0c0-5-6-12-6-12Z" />
+        <path d="M9.5 16.5a3 3 0 0 0 2 1.5" />
+      </symbol>
+      <symbol id="icon-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5l3 2" />
+      </symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24">
+        <path d="m5 12 4 4L19 6" />
+      </symbol>
+      <symbol id="icon-plus" viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14" />
+      </symbol>
+      <symbol id="icon-spark" viewBox="0 0 24 24">
+        <path
+          d="m12 3 1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM18.5 15l.7 2.3 2.3.7-2.3.7-.7 2.3-.7-2.3-2.3-.7 2.3-.7z"
+        />
+      </symbol>
+      <symbol id="icon-user" viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 21a8 8 0 0 1 16 0" />
+      </symbol>
+      <symbol id="icon-chevron" viewBox="0 0 24 24">
+        <path d="m9 18 6-6-6-6" />
+      </symbol>
+      <!-- หัวของ Baobuddy จัดกึ่งกลาง สำหรับวงกลมเล็ก -->
+      <symbol id="bao-face" viewBox="5 -4.2 54 54">
+        <use href="#bao" width="64" height="64" />
+      </symbol>
+      <symbol id="icon-camera" viewBox="0 0 24 24">
+        <path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.8l1.4-2h4.6l1.4 2h1.8A2.5 2.5 0 0 1 20 8.5v8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5z" />
+        <circle cx="12" cy="12.5" r="3.5" />
+      </symbol>
+      <symbol id="icon-history" viewBox="0 0 24 24">
+        <path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1M3.5 4v4h4" />
+        <path d="M12 7.5V12l3 2" />
+      </symbol>
+      <symbol id="icon-trash" viewBox="0 0 24 24">
+        <path d="M4 7h16M10 11v6M14 11v6M6 7l1 12.5A1.6 1.6 0 0 0 8.6 21h6.8a1.6 1.6 0 0 0 1.6-1.5L18 7M9 7V4.5h6V7" />
+      </symbol>
+      <symbol id="icon-external" viewBox="0 0 24 24">
+        <path d="M14 4h6v6M20 4l-9 9M18 14v4.5A1.5 1.5 0 0 1 16.5 20h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10" />
+      </symbol>
+      <symbol id="icon-share" viewBox="0 0 24 24">
+        <path d="M12 15V3.5M8 7l4-4 4 4" />
+        <path d="M7 10.5H6A2 2 0 0 0 4 12.5v6A2 2 0 0 0 6 20.5h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1" />
+      </symbol>
+      <symbol id="icon-download" viewBox="0 0 24 24">
+        <path d="M12 4v11M8 11l4 4 4-4M5 19.5h14" />
+      </symbol>
+      <symbol id="icon-lock" viewBox="0 0 24 24">
+        <rect x="5" y="10.5" width="14" height="10" rx="3" />
+        <path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5M12 14.5v2.5" />
+      </symbol>
+      <symbol id="icon-send" viewBox="0 0 24 24">
+        <path d="M21 3 10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5z" />
+      </symbol>
+      <symbol id="icon-refresh" viewBox="0 0 24 24">
+        <path d="M20 5v5h-5M4 19v-5h5" />
+        <path d="M19.4 10A8 8 0 0 0 5.6 7.5M4.6 14a8 8 0 0 0 13.800 2.5" />
+      </symbol>
+      <!-- Baobuddy: ตัวการ์ตูนผู้ช่วย ใช้ซ้ำทั้งแอป -->
+      <symbol id="bao" viewBox="0 0 64 64">
+        <ellipse class="bao-shadow" cx="32" cy="61.5" rx="12" ry="2" fill="#1d1d1f" fill-opacity=".12" />
+        <g class="bao-body">
+          <path d="M46.5 49.5q4.6 2.2 5 7" fill="none" stroke="#4d8ff7" stroke-width="5.5" stroke-linecap="round" />
+          <g class="bao-arm">
+            <path d="M17.5 49.5L10.5 41" fill="none" stroke="#4d8ff7" stroke-width="5.5" stroke-linecap="round" />
+            <circle cx="9.3" cy="38.4" r="3.9" fill="#4d8ff7" />
+          </g>
+          <path d="M24.5 44h15a7.5 7.5 0 0 1 7.5 7.5v1.5a6.5 6.5 0 0 1-6.5 6.5h-17a6.5 6.5 0 0 1-6.5-6.5v-1.5a7.5 7.5 0 0 1 7.5-7.5z" fill="#4d8ff7" />
+          <circle cx="32" cy="52" r="4.3" fill="#f7fbff" />
+          <path d="M32 54.4l-2.2-2a1.25 1.25 0 0 1 2.2-1.2 1.25 1.25 0 0 1 2.2 1.2z" fill="#ff6b7a" />
+          <g class="bao-head">
+            <path class="bao-antenna-stem" d="M32 9.5C32 6.5 34 4.6 36 3.8" fill="none" stroke="#3172e6" stroke-width="2.2" stroke-linecap="round" />
+            <circle class="bao-antenna" cx="37" cy="3.4" r="3" fill="#ff6b6b" />
+            <circle cx="36.1" cy="2.5" r=".9" fill="#fff" opacity=".8" />
+            <circle cx="10" cy="27.5" r="4.2" fill="#3172e6" />
+            <circle cx="54" cy="27.5" r="4.2" fill="#3172e6" />
+            <rect x="11" y="8.5" width="42" height="36" rx="17" fill="#4d8ff7" />
+            <ellipse cx="23.5" cy="13.4" rx="7.5" ry="2.4" fill="#fff" opacity=".32" transform="rotate(-12 23.5 13.4)" />
+            <rect x="16" y="14" width="32" height="24.5" rx="11.5" fill="#f7fbff" />
+            <g class="bao-eyes">
+              <ellipse cx="25.5" cy="25.5" rx="2.7" ry="3.3" fill="#1f4fb8" />
+              <ellipse cx="38.5" cy="25.5" rx="2.7" ry="3.3" fill="#1f4fb8" />
+              <circle cx="26.4" cy="24.4" r=".85" fill="#fff" />
+              <circle cx="39.4" cy="24.4" r=".85" fill="#fff" />
+            </g>
+            <path class="bao-smile" d="M27.8 30.6q4.2 3.4 8.4 0" fill="none" stroke="#1f4fb8" stroke-width="2" stroke-linecap="round" />
+          </g>
+        </g>
+      </symbol>
+      <symbol id="icon-calendar" viewBox="0 0 24 24">
+        <rect x="3" y="5" width="18" height="16" rx="2" />
+        <path d="M7 3v4M17 3v4M3 10h18" />
+      </symbol>
+    </svg>
+
+    <div class="launch-screen" id="launch-screen" role="status" aria-live="polite">
+      <span class="launch-mark"><svg class="bao" viewBox="0 0 64 64" aria-hidden="true"><use href="#bao-face"></use></svg></span>
+      <p class="launch-text">
+        <span class="launch-open">กำลังเปิด DoBao…</span>
+        <span class="launch-login">กำลังเข้าสู่ระบบ…</span>
+        <span class="launch-google">กำลังไปที่ Google…</span>
+      </p>
+      <span class="launch-bar" aria-hidden="true"><span></span></span>
+    </div>
+
+    <section
+      id="login-screen"
+      class="login-screen"
+      aria-labelledby="login-title"
+    >
+      <div class="login-stage">
+        <div class="login-copy">
+          <div class="login-brand">
+            <span class="brand-mark"
+              ><svg><use href="#icon-heart"></use></svg
+            ></span>
+            <strong>DoBao</strong>
+          </div>
+          <h1 id="login-title">
+            ดูแลสุขภาพ<br /><span class="accent-text">ทีละวัน</span>
+            อย่างเข้าใจ
+          </h1>
+          <p class="login-lead">
+            รู้ทันทีว่าวันนี้ต้องทำอะไรต่อ จดอาหาร ยา และกิจกรรมได้ในไม่กี่วินาที
+            โดยมี Baobuddy คอยช่วยอยู่ข้าง ๆ
+          </p>
+          <ul class="login-points">
+            <li>
+              <span class="point-icon" aria-hidden="true"
+                ><svg><use href="#icon-clock"></use></svg></span
+              ><span
+                ><strong>ตารางวันนี้</strong>บอกสิ่งที่ต้องทำต่อ ตามเวลาจริง</span
+              >
+            </li>
+            <li>
+              <span class="point-icon buddy" aria-hidden="true"><svg class="bao" viewBox="0 0 64 64" aria-hidden="true"><use href="#bao-face"></use></svg></span
+              ><span
+                ><strong>เล่าให้ Baobuddy ฟัง</strong>แล้วช่วยจดเป็นบันทึกให้</span
+              >
+            </li>
+            <li>
+              <span class="point-icon" aria-hidden="true"
+                ><svg><use href="#icon-check"></use></svg></span
+              ><span
+                ><strong>คุณเป็นคนเลือก</strong>ตรวจทุกครั้งก่อนบันทึก</span
+              >
+            </li>
+          </ul>
+          <div class="login-action">
+            <label class="consent-option login-consent"
+              ><input type="checkbox" id="login-notice" /><span
+                id="login-notice-label"
+                >ฉันอ่านประกาศความเป็นส่วนตัวและยอมรับข้อกำหนดการใช้งานแล้ว</span
+              ></label
+            >
+            <button class="google-button full" id="google-login" disabled>
+              <svg class="google-logo" viewBox="0 0 48 48" aria-hidden="true">
+              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+            </svg>
+              <span>ดำเนินการต่อด้วย Google</span>
+            </button>
+            <p id="login-status" class="login-status" role="status">
+              กำลังตรวจการเชื่อมต่อ…
+            </p>
+            <div class="login-links">
+              <button class="privacy-chip subtle" data-open-privacy>
+                <svg><use href="#icon-lock"></use></svg
+                ><span>ความเป็นส่วนตัวและข้อกำหนด</span>
+              </button>
+            </div>
+            <details id="login-browser-help" class="login-browser-help" hidden>
+              <summary>เปิดผ่านแอป LINE / Instagram อยู่ใช่ไหม?</summary>
+              <p>
+                ถ้าเปิดผ่าน LINE, Facebook หรือแอปอื่น ให้แตะเมนู ⋯ แล้วเลือก
+                “เปิดในเบราว์เซอร์” หรือคัดลอกลิงก์นี้ไปเปิดในแอป Chrome / Safari
+                โดยตรง
+              </p>
+              <a class="primary-btn full" id="open-external" href="/"
+                ><svg><use href="#icon-external"></use></svg
+                ><span id="open-external-label">เปิดใน Safari / Chrome</span></a
+              >
+              <label for="login-browser-url" class="input-label"
+                >หรือคัดลอกลิงก์ DoBao</label
+              >
+              <input
+                id="login-browser-url"
+                readonly
+                type="url"
+                aria-label="ลิงก์ DoBao สำหรับเปิดในเบราว์เซอร์"
+              />
+              <button
+                type="button"
+                class="secondary-btn full"
+                id="copy-login-link"
+              >
+                คัดลอกลิงก์เปิดใน Chrome / Safari
+              </button>
+              <p id="login-browser-status" role="status"></p>
+            </details>
+            <small class="login-footnote"
+              >เลือกความยินยอมข้อมูลสุขภาพและการใช้ AI ได้หลังเข้าสู่ระบบ</small
+            >
+          </div>
+        </div>
+
+        <div class="login-visual" aria-hidden="true">
+          <div class="device">
+            <div class="device-screen">
+              <div class="d-status"><span>9:41</span><i></i></div>
+              <p class="d-eyebrow">วันพฤหัสบดีที่ 12 พฤศจิกายน</p>
+              <p class="d-title">วันนี้</p>
+              <div class="d-next">
+                <div>
+                  <span class="d-kicker">ถัดไป · อีก 25 นาที</span>
+                  <strong class="d-time">16:00</strong>
+                  <span class="d-label">เดินหลังอาหาร 15 นาที</span>
+                </div>
+                <span class="d-ring"><span>🏃</span></span>
+              </div>
+              <ol class="d-timeline">
+                <li class="done"><b>07:30</b><i></i><span>ข้าวต้มปลา</span></li>
+                <li class="done"><b>08:00</b><i></i><span>ยาหลังอาหารเช้า</span></li>
+                <li class="done"><b>12:10</b><i></i><span>ข้าวมันไก่ครึ่งจาน</span></li>
+                <li class="now"><b>16:00</b><i></i><span>เดินหลังอาหาร</span></li>
+                <li><b>20:00</b><i></i><span>ยาก่อนนอน</span></li>
+              </ol>
+              <div class="d-water">
+                <span>💧 ดื่มน้ำ</span><span class="d-bars"
+                  ><i></i><i></i><i></i><i></i><i></i><i></i></span
+                ><b>4/6</b>
+              </div>
+              <div class="d-tabbar"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <div class="visual-buddy">
+            <p class="visual-bubble">ใกล้ถึงเวลาเดินแล้วนะ 🏃</p>
+            <span class="visual-bao"><svg class="bao bao-live" viewBox="0 0 64 64" aria-hidden="true"><ellipse class="bao-shadow" cx="32" cy="61.5" rx="12" ry="2" fill="#1d1d1f" fill-opacity=".12" />
+        <g class="bao-body">
+          <path d="M46.5 49.5q4.6 2.2 5 7" fill="none" stroke="#4d8ff7" stroke-width="5.5" stroke-linecap="round" />
+          <g class="bao-arm">
+            <path d="M17.5 49.5L10.5 41" fill="none" stroke="#4d8ff7" stroke-width="5.5" stroke-linecap="round" />
+            <circle cx="9.3" cy="38.4" r="3.9" fill="#4d8ff7" />
+          </g>
+          <path d="M24.5 44h15a7.5 7.5 0 0 1 7.5 7.5v1.5a6.5 6.5 0 0 1-6.5 6.5h-17a6.5 6.5 0 0 1-6.5-6.5v-1.5a7.5 7.5 0 0 1 7.5-7.5z" fill="#4d8ff7" />
+          <circle cx="32" cy="52" r="4.3" fill="#f7fbff" />
+          <path d="M32 54.4l-2.2-2a1.25 1.25 0 0 1 2.2-1.2 1.25 1.25 0 0 1 2.2 1.2z" fill="#ff6b7a" />
+          <g class="bao-head">
+            <path class="bao-antenna-stem" d="M32 9.5C32 6.5 34 4.6 36 3.8" fill="none" stroke="#3172e6" stroke-width="2.2" stroke-linecap="round" />
+            <circle class="bao-antenna" cx="37" cy="3.4" r="3" fill="#ff6b6b" />
+            <circle cx="36.1" cy="2.5" r=".9" fill="#fff" opacity=".8" />
+            <circle cx="10" cy="27.5" r="4.2" fill="#3172e6" />
+            <circle cx="54" cy="27.5" r="4.2" fill="#3172e6" />
+            <rect x="11" y="8.5" width="42" height="36" rx="17" fill="#4d8ff7" />
+            <ellipse cx="23.5" cy="13.4" rx="7.5" ry="2.4" fill="#fff" opacity=".32" transform="rotate(-12 23.5 13.4)" />
+            <rect x="16" y="14" width="32" height="24.5" rx="11.5" fill="#f7fbff" />
+            <g class="bao-eyes">
+              <ellipse cx="25.5" cy="25.5" rx="2.7" ry="3.3" fill="#1f4fb8" />
+              <ellipse cx="38.5" cy="25.5" rx="2.7" ry="3.3" fill="#1f4fb8" />
+              <circle cx="26.4" cy="24.4" r=".85" fill="#fff" />
+              <circle cx="39.4" cy="24.4" r=".85" fill="#fff" />
+            </g>
+            <path class="bao-smile" d="M27.8 30.6q4.2 3.4 8.4 0" fill="none" stroke="#1f4fb8" stroke-width="2" stroke-linecap="round" />
+          </g>
+        </g></svg></span>
+          </div>
+          <span class="visual-tag">ตัวอย่างหน้าจอ</span>
+        </div>
+      </div>
+    </section>
+    <div class="app-shell" id="app-shell" hidden>
+      <!-- Sidebar แสดงบนหน้าจอขนาดใหญ่ -->
+      <aside class="sidebar" aria-label="เมนูหลัก">
+        <a
+          class="brand"
+          href="#dashboard"
+          data-nav="dashboard"
+          aria-label="DoBao หน้าแรก"
+        >
+          <span class="brand-mark"
+            ><svg><use href="#icon-heart"></use></svg
+          ></span>
+          <span
+            ><strong>DoBao</strong><small>ดูแลทุกวัน อย่างเข้าใจ</small></span
+          >
+        </a>
+
+        <nav class="side-nav">
+          <p class="nav-label">เมนูหลัก</p>
+          <button class="nav-item active" data-page="dashboard">
+            <svg><use href="#icon-home"></use></svg><span>หน้าแรก</span>
+          </button>
+          <button class="nav-item" data-page="food">
+            <svg><use href="#icon-food"></use></svg><span>อาหาร</span>
+          </button>
+          <button class="nav-item" data-page="exercise">
+            <svg><use href="#icon-activity"></use></svg><span>ออกกำลังกาย</span>
+          </button>
+          <button class="nav-item" data-page="medicine">
+            <svg><use href="#icon-pill"></use></svg><span>ยา</span>
+          </button>
+          <button class="nav-item" data-page="health">
+            <svg><use href="#icon-heart"></use></svg><span>ติดตามสุขภาพ</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-buddy">
+          <span class="buddy-avatar"><svg class="bao" viewBox="0 0 64 64" aria-hidden="true"><use href="#bao-face"></use></svg></span>
+          <strong>มีอะไรให้ช่วยไหม?</strong>
+          <p>ถาม Baobuddy หรือให้ช่วยจดบันทึกได้เลย</p>
+          <button class="secondary-btn full" data-open-chat>
+            คุยกับ Baobuddy
+          </button>
+        </div>
+
+        <button class="profile-mini profile-button" data-open-profile>
+          <span class="avatar" data-avatar
+            ><svg><use href="#icon-user"></use></svg
+          ></span>
+          <span
+            ><strong data-user-name>บัญชีของฉัน</strong
+            ><small>บัญชีและความเป็นส่วนตัว</small></span
+          >
+        </button>
+      </aside>
+
+      <main class="main-content" id="main-content" tabindex="-1">
+        <!-- ส่วนหัวคงที่ ใช้ร่วมกันทุกหน้า -->
+        <header class="topbar">
+          <div class="mobile-brand">
+            <span class="brand-mark"
+              ><svg><use href="#icon-heart"></use></svg
+            ></span>
+            <strong>DoBao</strong>
+          </div>
+          <p class="topbar-title" id="topbar-title" aria-hidden="true">หน้าแรก</p>
+          <p id="sync-status" class="sync-status" role="status"></p>
+          <div class="date-pill">
+            <svg><use href="#icon-calendar"></use></svg
+            ><span id="today-date">วันนี้</span>
+          </div>
+          <button
+            class="avatar account-avatar"
+            data-avatar
+            data-open-profile
+            aria-label="เปิดโปรไฟล์ของฉัน"
+          >
+            <svg><use href="#icon-user"></use></svg>
+          </button>
+        </header>
+
+        <div class="content-wrap">
+          <div
+            id="cleanup-status"
+            class="connection-status"
+            role="status"
+            hidden
+          ></div>
+          <div
+            id="connection-status"
+            class="connection-status"
+            role="status"
+            hidden
+          ></div>
+          <div id="consent-banner" class="notice" hidden>
+            <p>
+              เลือกความยินยอมก่อนเริ่มบันทึกข้อมูลสุขภาพ
+              คุณแก้ไขหรือถอนความยินยอมได้ทุกเมื่อ
+            </p>
+            <button class="secondary-btn" data-open-consent>
+              ตั้งค่าความยินยอม
+            </button>
+          </div>
+          <!-- หน้า Dashboard -->
+          <section
+            class="page active"
+            id="page-dashboard"
+            data-page-panel="dashboard"
+          >
+            <header class="today-header welcome-row">
+              <div class="hero-text">
+                <p class="eyebrow" id="today-eyebrow">วันนี้</p>
+                <h1>
+                  <span id="greeting-text">สวัสดี</span>
+                  <span data-user-name>คุณ</span>
+                </h1>
+                <p class="buddy-line">
+                  <span class="buddy-avatar small" id="hero-buddy"><svg class="bao" viewBox="0 0 64 64" aria-hidden="true"><use href="#bao-face"></use></svg></span>
+                  <span id="buddy-message"
+                    >วันนี้มาดูแลสุขภาพกันนะ ทีละนิดก็สำคัญ</span
+                  >
+                </p>
+              </div>
+              <div class="day-score" aria-label="ยังไม่มีเป้าหมายที่สำเร็จ">
+                <div class="score-ring" style="--progress: 0">
+                  <span id="header-goal-percent">0%</span>
+                </div>
+                <span>เป้าหมายวันนี้</span>
+              </div>
+              <div class="quick-tools compact-tools">
+                <button class="quick-tool journal-tool" id="open-journal">
+                  <span class="tool-symbol" aria-hidden="true">✍️</span
+                  ><span
+                    ><strong>บันทึกวันนี้</strong
+                    ><small>เล่าให้ฟัง แล้ว Baobuddy ช่วยจด</small></span
+                  ><svg class="tool-arrow"><use href="#icon-chevron"></use></svg>
+                </button>
+                <button class="quick-tool chat-tool" data-open-chat>
+                  <span class="tool-symbol" aria-hidden="true">💬</span
+                  ><span
+                    ><strong>ถาม Baobuddy</strong
+                    ><small>ถามเรื่องอาหาร กิจวัตร หรือวิธีใช้</small></span
+                  ><svg class="tool-arrow"><use href="#icon-chevron"></use></svg>
+                </button>
+              </div>
+            </header>
+
+            <section
+              class="next-up"
+              id="next-up"
+              aria-live="polite"
+              aria-label="สิ่งที่ต้องทำต่อ"
+            ></section>
+
+            <div class="dashboard-columns">
+              <div class="dashboard-main">
+                <section
+                  class="panel schedule-panel"
+                  id="schedule-panel"
+                  aria-labelledby="timeline-title"
+                >
+                  <div class="panel-heading">
+                    <h2 id="timeline-title">ตารางวันนี้</h2>
+                    <div class="panel-heading-actions">
+                      <button class="chip-button" id="open-share">
+                        <svg><use href="#icon-share"></use></svg>แชร์สรุป
+                      </button>
+                      <button class="chip-button" data-jump="health">
+                        จัดการตาราง
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="week-strip"
+                    id="week-strip"
+                    role="tablist"
+                    aria-label="เลือกวันในตาราง"
+                  ></div>
+                  <div
+                    class="day-summary"
+                    id="day-summary"
+                    aria-label="สรุปของวันที่เลือก"
+                  ></div>
+                  <ol class="timeline" id="timeline"></ol>
+                </section>
+                <section class="panel goals-panel">
+                  <div class="panel-heading">
+                    <div>
+                      <p class="eyebrow">ก้าวเล็ก ๆ เพื่อสุขภาพ</p>
+                      <h2>เป้าหมายวันนี้</h2>
+                    </div>
+                    <strong class="goal-count"
+                      ><span id="goal-done-count">0</span>/<span
+                        id="goal-total-count"
+                        >0</span
+                      >
+                      สำเร็จ</strong
+                    >
+                  </div>
+                  <div class="goal-footer">
+                    <div class="progress-track">
+                      <span id="goal-progress" style="width: 0%"></span>
+                    </div>
+                    <strong id="goal-percent">0%</strong>
+                  </div>
+                  <div class="goal-list" id="goal-list"></div>
+                  <form id="goal-form" class="inline-form">
+                    <label class="sr-only" for="new-goal"
+                      >เพิ่มเป้าหมายของคุณ</label
+                    ><input
+                      id="new-goal"
+                      maxlength="120"
+                      placeholder="เพิ่มเป้าหมาย เช่น เดิน 15 นาที"
+                      required
+                    /><button class="secondary-btn" type="submit">
+                      <svg><use href="#icon-plus"></use></svg>เพิ่ม
+                    </button>
+                  </form>
+                </section>
+
+              </div>
+
+              <aside class="today-panel">
+              <div class="summary-grid" aria-label="ข้อมูลสุขภาพโดยสรุป">
+                  <button class="summary-card tone-coral" data-jump="health">
+                    <span class="card-icon coral"
+                      ><svg><use href="#icon-drop"></use></svg
+                    ></span>
+                    <span class="card-body">
+                      <span class="card-label">น้ำตาลล่าสุด</span>
+                      <span class="metric">
+                        <strong id="dashboard-sugar">—</strong><small>mg/dL</small>
+                      </span>
+                      <span id="sugar-timestamp" class="status-text"
+                        >ยังไม่มีบันทึก</span
+                      >
+                    </span>
+                  </button>
+                  <button class="summary-card tone-yellow" data-jump="food">
+                    <span class="card-icon yellow"
+                      ><svg><use href="#icon-food"></use></svg
+                    ></span>
+                    <span class="card-body">
+                      <span class="card-label">อาหารวันนี้</span>
+                      <span class="metric">
+                        <strong id="meal-count">0</strong><small>มื้อ</small>
+                      </span>
+                      <span id="meal-energy-summary" class="status-text"
+                        >ยังไม่มีบันทึก</span
+                      >
+                    </span>
+                  </button>
+                  <button class="summary-card tone-blue" data-jump="exercise">
+                    <span class="card-icon blue"
+                      ><svg><use href="#icon-activity"></use></svg
+                    ></span>
+                    <span class="card-body">
+                      <span class="card-label">ขยับร่างกายวันนี้</span>
+                      <span class="metric">
+                        <strong id="exercise-summary">0</strong><small>นาที</small>
+                      </span>
+                      <span id="exercise-mini-bar" class="status-text"
+                        >ยังไม่มีบันทึก</span
+                      >
+                    </span>
+                  </button>
+                  <button class="summary-card tone-purple" data-jump="medicine">
+                    <span class="card-icon purple"
+                      ><svg><use href="#icon-pill"></use></svg
+                    ></span>
+                    <span class="card-body">
+                      <span class="card-label">ยาวันนี้</span>
+                      <span class="metric">
+                        <strong id="medicine-summary">0</strong
+                        ><small>ครั้งที่ทานแล้ว</small>
+                      </span>
+                      <span class="status-text">แตะเพื่อดูบันทึกยา</span>
+                    </span>
+                  </button>
+                </div>
+
+                <div class="water-card">
+                  <div class="water-top">
+                    <div>
+                      <p class="eyebrow">ดื่มน้ำวันนี้</p>
+                      <h2>
+                        <span id="water-count">0</span> <small>แก้ว</small>
+                      </h2>
+                    </div>
+                    <div class="water-visual">
+                      <svg><use href="#icon-drop"></use></svg>
+                    </div>
+                  </div>
+                  <div
+                    class="water-dots"
+                    id="water-dots"
+                    aria-label="ยังไม่มีบันทึกน้ำดื่ม"
+                  ></div>
+                  <div class="water-actions">
+                    <button
+                      class="water-undo"
+                      id="remove-water"
+                      aria-label="ลด 1 แก้ว"
+                    >
+                      −
+                    </button>
+                    <button class="secondary-btn full" id="add-water">
+                      <svg><use href="#icon-plus"></use></svg> เพิ่ม 1 แก้ว
+                    </button>
+                  </div>
+                </div>
+              </aside>
+            </div>
+
+            <p class="fine-print">
+              <svg><use href="#icon-heart"></use></svg>
+              DoBao ช่วยบันทึกและจัดการกิจวัตรประจำวัน
+              ไม่ใช้เพื่อวินิจฉัยหรือทดแทนคำแนะนำจากแพทย์
+            </p>
+          </section>
+
+          <!-- หน้าอาหาร -->
+          <section class="page" id="page-food" data-page-panel="food">
+            <div class="page-heading">
+              <div>
+                <p class="eyebrow">เลือกให้พอดี อิ่มอย่างสบายใจ</p>
+                <h1>อาหาร</h1>
+                <p>เล่าให้ Baobuddy ฟัง หรือจดเองก็ได้</p>
+              </div>
+              <span class="large-icon yellow"
+                ><svg><use href="#icon-food"></use></svg
+              ></span>
+            </div>
+            <section
+              class="capture-card food-capture"
+              data-capture="food"
+              aria-label="บันทึกอาหารกับ Baobuddy"
+            ></section>
+            <details class="manual-panel" id="food-manual">
+              <summary>
+                <span>บันทึกเอง</span
+                ><small>พิมพ์ชื่ออาหาร หรือเพิ่มรายละเอียดที่ทราบ</small>
+              </summary>
+              <form id="meal-form" class="entry-card food-entry">
+                <div class="entry-heading">
+                  <span class="entry-symbol">🍽️</span>
+                  <div>
+                    <h2>วันนี้ทานอะไรบ้าง</h2>
+                    <p>กรอกเองได้เลย แล้วตรวจรายการก่อนบันทึก</p>
+                  </div>
+                </div>
+                <label class="input-label"
+                  >ชื่ออาหาร<input
+                    id="meal-name"
+                    maxlength="120"
+                    required
+                    placeholder="พิมพ์ชื่ออาหารที่ทาน"
+                /></label>
+                <div class="friendly-grid">
+                  <label class="input-label"
+                    >ปริมาณ (ถ้าทราบ)<input
+                      id="meal-quantity"
+                      type="number"
+                      min="0.01"
+                      max="100000"
+                      step="any"
+                      inputmode="decimal"
+                      placeholder="เช่น 1"
+                  /></label>
+                  <label class="input-label"
+                    >หน่วย<input
+                      id="meal-unit"
+                      maxlength="40"
+                      placeholder="เช่น จาน ถ้วย ช้อน"
+                  /></label>
+                  <label class="input-label"
+                    >วันที่ทาน<input id="meal-date" type="date" required
+                  /></label>
+                  <label class="input-label"
+                    >เวลา (เว้นว่างได้)<input id="meal-time" type="time"
+                  /></label>
+                  <label class="input-label"
+                    >มื้ออาหาร<select id="meal-period">
+                      <option value="unspecified">ยังไม่ระบุมื้อ</option>
+                      <option value="morning">มื้อเช้า</option>
+                      <option value="noon">มื้อกลางวัน</option>
+                      <option value="evening">มื้อเย็น</option>
+                      <option value="afternoon">ของว่างช่วงบ่าย</option>
+                      <option value="night">ช่วงกลางคืน</option>
+                    </select></label
+                  >
+                  <label class="input-label"
+                    >ลักษณะอาหาร<select id="meal-state">
+                      <option value="unknown">ยังไม่ระบุ</option>
+                      <option value="cooked">ปรุงสุก</option>
+                      <option value="raw">ดิบ</option>
+                      <option value="packaged">บรรจุสำเร็จ</option>
+                    </select></label
+                  >
+                </div>
+                <button class="primary-btn full" id="save-meal" type="submit">
+                  บันทึกอาหาร
+                </button>
+                <button class="text-button" id="meal-components" type="button">
+                  มีหลายอย่างในมื้อ? แยกอาหารและปริมาณ
+                </button>
+              </form>
+              <section
+                class="shortcut-panel"
+                aria-labelledby="food-shortcut-title"
+              >
+                <div class="panel-heading">
+                  <div>
+                    <h2 id="food-shortcut-title">ปุ่มลัดของฉัน</h2>
+                    <p>แตะเพื่อเติมชื่อด้านบน ยังไม่บันทึกให้</p>
+                  </div>
+                  <button class="text-button" data-manage-shortcuts="food">
+                    จัดการ
+                  </button>
+                </div>
+                <div id="food-shortcuts" class="shortcut-list"></div>
+                <button class="text-button" id="add-food-shortcut">
+                  ＋ เก็บชื่อที่กรอกเป็นปุ่มลัด
+                </button>
+              </section>
+            </details>
+            <div class="section-heading">
+              <h2>อาหารที่บันทึกไว้</h2>
+
+            </div>
+            <div class="record-list" id="food-records"></div>
+            <div class="tip-banner">
+              <span>💡</span>
+              <p>
+                <strong>ชวนลองวันนี้</strong><br />ลดเครื่องดื่มที่มีน้ำตาล
+                และเพิ่มผักในแต่ละมื้อ
+                เลือกปริมาณให้เหมาะกับคำแนะนำของบุคลากรทางการแพทย์
+              </p>
+            </div>
+          </section>
+
+          <!-- หน้าออกกำลังกาย -->
+          <section class="page" id="page-exercise" data-page-panel="exercise">
+            <div class="page-heading">
+              <div>
+                <p class="eyebrow">ขยับร่างกายตามกำลัง</p>
+                <h1>ออกกำลังกาย</h1>
+                <p>จดกิจกรรมที่ทำจริง ตามกำลังของคุณ</p>
+              </div>
+              <span class="large-icon blue"
+                ><svg><use href="#icon-activity"></use></svg
+              ></span>
+            </div>
+            <section
+              class="capture-card activity-capture"
+              data-capture="activity"
+              aria-label="บันทึกกิจกรรมกับ Baobuddy"
+            ></section>
+            <details class="manual-panel" id="activity-manual">
+              <summary>
+                <span>บันทึกเอง</span
+                ><small>ระบุกิจกรรมและเวลาที่ทำด้วยตัวเอง</small>
+              </summary>
+              <form id="activity-form" class="entry-card activity-entry">
+                <div class="entry-heading">
+                  <span class="entry-symbol">🌿</span>
+                  <div>
+                    <h2>วันนี้ทำกิจกรรมอะไร</h2>
+                    <p>ใส่กิจกรรมที่ทำจริง จะพิมพ์เองหรือใช้ปุ่มลัดก็ได้</p>
+                  </div>
+                </div>
+                <label class="input-label"
+                  >ชื่อกิจกรรม<input
+                    id="activity-name"
+                    maxlength="120"
+                    required
+                    placeholder="เช่น เดินรอบบ้าน ทำสวน"
+                /></label>
+                <div class="friendly-grid">
+                  <label class="input-label"
+                    >วันที่ทำ<input id="activity-date" type="date" required
+                  /></label>
+                  <label class="input-label"
+                    >เวลาเริ่ม (เว้นว่างได้)<input
+                      id="activity-time"
+                      type="time"
+                  /></label>
+                  <label class="input-label"
+                    >ระยะเวลาที่ทำจริง (นาที)<input
+                      id="activity-duration"
+                      type="number"
+                      min="1"
+                      max="1440"
+                      inputmode="numeric"
+                      placeholder="เช่น 15"
+                  /></label>
+                  <label class="input-label"
+                    >ความหนัก (ถ้าทราบ)<select id="activity-intensity">
+                      <option value="">ยังไม่ระบุ</option>
+                      <option value="เบา">เบา</option>
+                      <option value="ปานกลาง">ปานกลาง</option>
+                      <option value="หนัก">หนัก</option>
+                    </select></label
+                  >
+                </div>
+                <p class="form-hint">
+                  ถ้ากรอกนาที กรุณาระบุเวลาเริ่มด้วย
+                  เพื่อบันทึกช่วงเวลาที่ถูกต้อง
+                </p>
+                <button
+                  class="primary-btn full"
+                  id="finish-activity"
+                  type="submit"
+                >
+                  บันทึกกิจกรรม
+                </button>
+              </form>
+              <section
+                class="shortcut-panel"
+                aria-labelledby="activity-shortcut-title"
+              >
+                <div class="panel-heading">
+                  <div>
+                    <h2 id="activity-shortcut-title">ปุ่มลัดของฉัน</h2>
+                    <p>แตะเพื่อเติมชื่อ แล้วระบุเวลาที่ทำจริง</p>
+                  </div>
+                  <button class="text-button" data-manage-shortcuts="activity">
+                    จัดการ
+                  </button>
+                </div>
+                <div id="activity-shortcuts" class="shortcut-list"></div>
+                <button class="text-button" id="add-activity-shortcut">
+                  ＋ เก็บชื่อที่กรอกเป็นปุ่มลัด
+                </button>
+              </section>
+            </details>
+            <section class="exercise-progress-card">
+              <div class="progress-copy">
+                <span class="card-icon blue"
+                  ><svg><use href="#icon-activity"></use></svg
+                ></span>
+                <div>
+                  <p>กิจกรรมที่บันทึกวันนี้</p>
+                  <h2>
+                    <span id="exercise-total">0</span> <small>นาที</small>
+                  </h2>
+                </div>
+              </div>
+              <strong id="exercise-message"
+                >บันทึกเฉพาะกิจกรรมที่คุณทำแล้ว</strong
+              >
+            </section>
+            <div class="section-heading">
+              <h2>กิจกรรมที่บันทึกไว้</h2>
+
+            </div>
+            <div class="record-list" id="activity-records"></div>
+            <div class="notice compact">
+              <svg><use href="#icon-heart"></use></svg>
+              <p>
+                หยุดพักทันทีหากมีอาการผิดปกติ และเลือกกิจกรรมตามคำแนะนำของแพทย์
+              </p>
+            </div>
+          </section>
+
+          <!-- หน้ายา -->
+          <section class="page" id="page-medicine" data-page-panel="medicine">
+            <div class="page-heading">
+              <div>
+                <p class="eyebrow">วันนี้ · <span id="medicine-date"></span></p>
+                <h1>ยาของฉัน</h1>
+                <p>จดยาที่ทานตามคำแนะนำของทีมรักษา</p>
+              </div>
+              <span class="large-icon purple"
+                ><svg><use href="#icon-pill"></use></svg
+              ></span>
+            </div>
+            <details class="manual-panel" id="medicine-manual">
+              <summary>
+                <span>บันทึกยา</span
+                ><small>ชื่อยา ขนาด และเวลาที่ทาน</small>
+              </summary>
+              <form id="medication-form" class="entry-card medicine-entry">
+                <label class="input-label"
+                  >ชื่อยา<input
+                    id="med-name"
+                    required
+                    maxlength="120"
+                    placeholder="พิมพ์ชื่อยาจากฉลาก"
+                /></label>
+                <div class="friendly-grid">
+                  <label class="input-label"
+                    >ขนาดที่ทาน (ถ้าทราบ)<input
+                      id="med-dose"
+                      type="number"
+                      min="0.01"
+                      step="any"
+                      inputmode="decimal"
+                      placeholder="เช่น 1" /></label
+                  ><label class="input-label"
+                    >หน่วย<input
+                      id="med-unit"
+                      maxlength="40"
+                      placeholder="เช่น เม็ด มิลลิกรัม" /></label
+                  ><label class="input-label"
+                    >วันที่<input id="med-date" type="date" required /></label
+                  ><label class="input-label"
+                    >เวลา (เว้นว่างได้)<input id="med-time" type="time"
+                  /></label>
+                </div>
+                <label class="input-label"
+                  >สถานะ<select id="med-state">
+                    <option value="unknown">ยังไม่ระบุ</option>
+                    <option value="reported_taken">รับประทานแล้ว</option>
+                    <option value="reminder_due">
+                      รายการที่ต้องรับประทานตามแผน
+                    </option>
+                    <option value="acknowledged">รับทราบรายการแล้ว</option>
+                  </select></label
+                >
+                <label class="input-label"
+                  >คำแนะนำจากแพทย์หรือเภสัชกร (ถ้ามี)<input
+                    id="med-instruction"
+                    maxlength="1000"
+                    placeholder="ตามฉลากหรือคำแนะนำที่คุณได้รับ"
+                /></label>
+                <button
+                  class="primary-btn full"
+                  id="add-medication"
+                  type="submit"
+                >
+                  บันทึกยา
+                </button>
+              </form>
+            </details>
+            <div class="section-heading">
+              <h2>ยาที่บันทึกไว้</h2>
+            </div>
+            <div class="medicine-list record-list" id="medicine-records"></div>
+            <div class="notice medicine-notice">
+              <svg><use href="#icon-pill"></use></svg>
+              <p>
+                <strong>ข้อควรจำ</strong
+                ><br />รับประทานยาตามคำแนะนำของแพทย์หรือเภสัชกรเท่านั้น
+                หากมีข้อสงสัยควรปรึกษาบุคลากรทางการแพทย์
+              </p>
+            </div>
+          </section>
+
+          <!-- หน้าติดตามสุขภาพ -->
+          <section class="page" id="page-health" data-page-panel="health">
+            <div class="page-heading">
+              <div>
+                <p class="eyebrow">บันทึกเพื่อเห็นความเปลี่ยนแปลง</p>
+                <h1>ติดตามสุขภาพ</h1>
+                <p>กรอกเฉพาะสิ่งที่ทราบ แล้วดูแนวโน้มของตัวเอง</p>
+              </div>
+              <span class="large-icon coral"
+                ><svg><use href="#icon-heart"></use></svg
+              ></span>
+            </div>
+            <div class="health-layout">
+              <form class="health-form panel" id="health-form">
+                <div class="panel-heading">
+                  <div>
+                    <p class="eyebrow">ข้อมูลวันนี้</p>
+                    <h2>เพิ่มบันทึกใหม่</h2>
+                  </div>
+                </div>
+                <div class="form-grid">
+                  <label
+                    ><span>น้ำตาลในเลือด</span>
+                    <div class="input-unit">
+                      <input
+                        id="sugar-input"
+                        name="sugar"
+                        type="number"
+                        min="1"
+                        max="1000"
+                        step="0.1"
+                        placeholder="เช่น 110"
+                      /><small>mg/dL</small>
+                    </div></label
+                  >
+                  <label
+                    ><span>น้ำหนัก</span>
+                    <div class="input-unit">
+                      <input
+                        id="weight-input"
+                        name="weight"
+                        type="number"
+                        min="1"
+                        max="500"
+                        step="0.1"
+                        placeholder="เช่น 60"
+                      /><small>กก.</small>
+                    </div></label
+                  >
+                  <label
+                    ><span>ช่วงที่วัด</span
+                    ><select id="glucose-context">
+                      <option value="unknown">ยังไม่ระบุ</option>
+                      <option value="fasting">ก่อนอาหาร / อดอาหาร</option>
+                      <option value="after_meal">หลังอาหาร</option>
+                      <option value="random">เวลาอื่น</option>
+                    </select></label
+                  >
+                  <label
+                    ><span>เวลาที่วัด</span
+                    ><input id="measurement-time" type="datetime-local"
+                  /></label>
+                </div>
+                <p class="form-hint measure-hint">
+                  ไม่กรอกเวลา = ใช้เวลาตอนนี้ · กรอกเฉพาะค่าที่วัดได้
+                </p>
+                <button class="primary-btn full" type="submit">
+                  <svg><use href="#icon-plus"></use></svg>
+                  บันทึกค่าที่วัด
+                </button>
+                <button class="text-button" type="button" id="add-other-record">
+                  บันทึกการนอน นัดหมาย หรือความรู้สึก
+                </button>
+              </form>
+              <section class="chart-panel panel">
+                <div class="panel-heading">
+                  <div>
+                    <p class="eyebrow">7 ครั้งล่าสุด</p>
+                    <h2>แนวโน้มระดับน้ำตาล</h2>
+                  </div>
+                  <span class="chart-value"
+                    ><strong id="chart-latest">—</strong> mg/dL</span
+                  >
+                </div>
+                <label class="field-label" for="chart-group" id="chart-group-label"
+                  >เลือกช่วงที่วัด</label
+                ><select id="chart-group"></select>
+                <p id="chart-empty" class="empty-state">
+                  ยังไม่มีข้อมูลน้ำตาลที่เปรียบเทียบกันได้
+                </p>
+                <div
+                  class="chart-wrap"
+                  aria-label="กราฟระดับน้ำตาลย้อนหลัง 7 วัน"
+                >
+                  <div class="chart-y" id="chart-y"></div>
+                  <svg
+                    id="sugar-chart"
+                    viewBox="0 0 560 190"
+                    role="img"
+                    aria-label="กราฟเส้นแสดงระดับน้ำตาล"
+                  >
+                    <defs>
+                      <linearGradient
+                        id="chart-fill"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="0"
+                          stop-color="#14b8a6"
+                          stop-opacity=".3"
+                        />
+                        <stop
+                          offset="1"
+                          stop-color="#14b8a6"
+                          stop-opacity="0"
+                        />
+                      </linearGradient>
+                    </defs>
+                    <g class="grid-lines">
+                      <line x1="0" y1="20" x2="560" y2="20" />
+                      <line x1="0" y1="70" x2="560" y2="70" />
+                      <line x1="0" y1="120" x2="560" y2="120" />
+                      <line x1="0" y1="170" x2="560" y2="170" />
+                    </g>
+                    <path id="chart-area" class="chart-area" d=""></path>
+                    <path id="chart-line" class="chart-line" d=""></path>
+                    <g id="chart-dots"></g>
+                  </svg>
+                  <div class="chart-x" id="chart-x"></div>
+                </div>
+              </section>
+            </div>
+            <div class="section-heading">
+              <h2>บันทึกล่าสุด</h2>
+            </div>
+            <div class="record-list" id="health-records"></div>
+            <details class="manual-panel" id="wellbeing-manual">
+              <summary>
+                <span>จดอาการหรือความรู้สึก</span
+                ><small>เก็บเป็นบันทึกของวันนี้</small>
+              </summary>
+            <form id="wellbeing-form" class="entry-card">
+              <label class="input-label"
+                >อยากบันทึกอะไร<textarea
+                  id="wellbeing-note"
+                  rows="3"
+                  maxlength="2000"
+                  required
+                  placeholder="พิมพ์อาการหรือความรู้สึกที่อยากจดไว้"
+                ></textarea>
+              </label>
+              <button class="primary-btn" type="submit">
+                บันทึกอาการ
+              </button>
+            </form>
+            </details>
+            <section class="panel plan-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">วางแผน 7 วัน</p>
+                  <h2>ตารางจากกิจวัตรของคุณ</h2>
+                </div>
+                <button class="secondary-btn" id="add-routine">
+                  <svg><use href="#icon-plus"></use></svg>เพิ่มกิจวัตร
+                </button>
+              </div>
+              <p>
+                จัดเวลาจากสิ่งที่คุณเลือกและยืนยันไว้ ตรวจเวลาชนก่อนบันทึกตาราง
+              </p>
+              <button class="primary-btn" id="preview-plan">
+                ตรวจและเสนอตาราง
+              </button>
+              <div id="plan-list" class="record-list"></div>
+            </section>
+          </section>
+          <!-- ข้อมูลบัญชีแยกจากข้อมูลสุขภาพที่ผู้ใช้เลือกส่งให้บริการ AI -->
+          <section class="page" id="page-support" data-page-panel="support">
+            <div class="page-heading">
+              <div>
+                <p class="eyebrow">ทีมพัฒนา DoBao</p>
+                <h1>ติดต่อทีม DoBao</h1>
+                <p>ส่งข้อความและกลับมาอ่านคำตอบได้ในหน้านี้</p>
+              </div>
+            </div>
+            <form class="entry-card" id="support-form">
+              <label class="input-label"
+                >เรื่องที่ต้องการติดต่อ<select id="support-topic">
+                  <option>การใช้งานแอป</option>
+                  <option>สิทธิและข้อมูลส่วนบุคคล</option>
+                  <option>ข้อเสนอแนะ</option>
+                </select></label
+              >
+              <label class="input-label"
+                >ข้อความถึงทีม<textarea
+                  id="support-message"
+                  rows="4"
+                  maxlength="2000"
+                  required
+                  placeholder="พิมพ์เรื่องที่ต้องการให้ทีมช่วยดู"
+                ></textarea>
+              </label>
+              <p class="form-hint">
+                ไม่จำเป็นต้องใส่ข้อมูลสุขภาพหรือรหัสผ่าน ทีมจะตอบกลับในหน้านี้
+              </p>
+              <button class="primary-btn" id="send-support" type="submit">
+                ส่งข้อความ
+              </button>
+              <p id="support-status" role="status"></p>
+            </form>
+            <div class="section-heading">
+              <h2>ข้อความของฉัน</h2>
+              <button class="text-button" id="reload-support">
+                ตรวจคำตอบล่าสุด
+              </button>
+            </div>
+            <div class="record-list" id="support-records"></div>
+          </section>
+          <section
+            class="page profile-page"
+            id="page-profile"
+            data-page-panel="profile"
+          >
+            <div class="profile-hero" id="identity-section">
+              <div class="profile-photo-wrap">
+                <span class="profile-photo" data-avatar aria-label="รูปโปรไฟล์"
+                  >☺</span
+                >
+                <label
+                  class="photo-edit upload-label"
+                  for="avatar-file"
+                  aria-label="เลือกรูปใหม่"
+                  title="เลือกรูปใหม่"
+                  ><svg><use href="#icon-camera"></use></svg
+                  ><input
+                    class="sr-only"
+                    id="avatar-file"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                /></label>
+              </div>
+              <div class="profile-hero-text">
+                <p class="eyebrow">โปรไฟล์ของฉัน</p>
+                <h1 data-user-name>บัญชีของฉัน</h1>
+                <p class="profile-email" data-user-email></p>
+                <div class="profile-hero-actions">
+                  <button class="privacy-chip" data-open-consent>
+                    <svg><use href="#icon-lock"></use></svg
+                    ><span>ความเป็นส่วนตัว</span>
+                  </button>
+                  <button class="text-button" id="remove-avatar" type="button">
+                    ลบรูป
+                  </button>
+                </div>
+              </div>
+            </div>
+            <p id="avatar-status" class="form-hint avatar-status" role="status">
+              แตะไอคอนกล้องเพื่อเปลี่ยนรูป
+            </p>
+            <div class="segmented" role="tablist" aria-label="ส่วนของโปรไฟล์">
+              <button
+                role="tab"
+                data-profile-tab="account"
+                aria-selected="true"
+                type="button"
+              >
+                ข้อมูลของฉัน
+              </button>
+              <button
+                role="tab"
+                data-profile-tab="health"
+                aria-selected="false"
+                type="button"
+              >
+                ข้อมูลสุขภาพ
+              </button>
+            </div>
+            <section class="profile-tab" data-profile-panel="account">
+              <form id="profile-form" class="entry-card profile-card">
+                <div class="friendly-grid">
+                  <label class="input-label"
+                    >ชื่อ<input
+                      id="first-name"
+                      autocomplete="given-name"
+                      maxlength="80"
+                      placeholder="ชื่อของคุณ" /></label
+                  ><label class="input-label"
+                    >นามสกุล<input
+                      id="last-name"
+                      autocomplete="family-name"
+                      maxlength="80"
+                      placeholder="นามสกุลของคุณ"
+                  /></label>
+                </div>
+                <label class="input-label"
+                  >ชื่อที่อยากให้แอปเรียก<input
+                    id="display-name"
+                    maxlength="80"
+                    required
+                    placeholder="เช่น MUGE"
+                /></label>
+                <fieldset class="theme-picker">
+                  <legend>สีของแอป</legend>
+                  <label
+                    ><input
+                      type="radio"
+                      name="profile-theme"
+                      value="mint"
+                      checked
+                    /><span class="theme-swatch mint"></span>เขียวมิ้นต์</label
+                  ><label
+                    ><input
+                      type="radio"
+                      name="profile-theme"
+                      value="lavender"
+                    /><span class="theme-swatch lavender"></span>ลาเวนเดอร์</label
+                  ><label
+                    ><input type="radio" name="profile-theme" value="peach" /><span
+                      class="theme-swatch peach"
+                    ></span
+                    >พีช</label
+                  >
+                </fieldset>
+                <div class="profile-save-actions">
+                  <button class="primary-btn" type="submit">บันทึก</button
+                  ><button class="text-button" type="button" id="reload-identity">
+                    โหลดโปรไฟล์ล่าสุด
+                  </button>
+                </div>
+                <p id="identity-status" class="form-hint" role="status"></p>
+              </form>
+              <div class="menu-list profile-account-link">
+                <button class="menu-row" type="button" data-open-account>
+                  <span class="menu-icon" aria-hidden="true">⚙️</span
+                  ><span
+                    ><strong>บัญชีและข้อมูลของฉัน</strong
+                    ><small>ดาวน์โหลดหรือลบข้อมูล และออกจากระบบ</small></span
+                  ><svg><use href="#icon-chevron"></use></svg>
+                </button>
+              </div>
+            </section>
+            <section
+              class="profile-tab profile-health-panel"
+              data-profile-panel="health"
+              id="health-profile-panel"
+              hidden
+            >
+              <p class="profile-completeness" id="profile-completeness">
+                โรคประจำตัว การแพ้ และข้อมูลที่ใช้ประกอบคำแนะนำ
+              </p>
+              <form
+                id="health-profile-form"
+                class="entry-card"
+                aria-labelledby="health-profile-title"
+              >
+                <div class="hp-intro" id="health-profile-section">
+                  <h2 id="health-profile-title">ข้อมูลประกอบการดูแล</h2>
+                  <p id="health-profile-saved" class="form-hint" role="status">
+                    ยังไม่มีข้อมูลส่วนนี้
+                  </p>
+                </div>
+                <details class="hp-group" open>
+                  <summary><span class="hp-icon">📏</span>ร่างกาย<small>อายุ น้ำหนัก ส่วนสูง</small></summary>
+                <div class="friendly-grid three-columns">
+                  <label class="input-label"
+                    >อายุ (ปี)<input
+                      id="hp-age"
+                      type="number"
+                      min="1"
+                      max="120"
+                      step="1"
+                      inputmode="numeric"
+                      placeholder="เว้นว่างได้" /></label
+                  ><label class="input-label"
+                    >น้ำหนัก (กก.)<input
+                      id="hp-weight_kg"
+                      type="number"
+                      min="0.1"
+                      max="500"
+                      step="any"
+                      inputmode="decimal" /></label
+                  ><label class="input-label"
+                    >ส่วนสูง (ซม.)<input
+                      id="hp-height_cm"
+                      type="number"
+                      min="0.1"
+                      max="260"
+                      step="any"
+                      inputmode="decimal"
+                  /></label>
+                </div>
+                </details>
+                <details class="hp-group">
+                  <summary><span class="hp-icon">💊</span>โรคประจำตัวและยา<small>ภาวะที่ได้รับแจ้ง ยาที่ใช้ประจำ</small></summary>
+                <div class="friendly-grid">
+                  <label class="input-label"
+                    >โรคประจำตัวหรือภาวะที่ได้รับแจ้ง<textarea
+                      id="hp-conditions"
+                      rows="3"
+                      maxlength="3000"
+                      placeholder="พิมพ์หนึ่งรายการต่อบรรทัด เช่น เบาหวานชนิดที่ 2"
+                    ></textarea></label
+                  ><label class="input-label"
+                    >ยาที่ใช้ประจำ<textarea
+                      id="hp-medications"
+                      rows="3"
+                      maxlength="3000"
+                      placeholder="ระบุชื่อยา ตามข้อมูลจากทีมรักษา"
+                    ></textarea>
+                  </label>
+                </div>
+                </details>
+                <details class="hp-group">
+                  <summary><span class="hp-icon">⚠️</span>การแพ้<small>อาหาร ยา หรือสิ่งที่แพ้</small></summary>
+                <div class="allergy-block">
+                  <label class="input-label"
+                    >ประวัติการแพ้<select id="hp-allergy-status">
+                      <option value="unknown">ยังไม่ทราบ / ยังไม่ระบุ</option>
+                      <option value="listed">มีสิ่งที่แพ้</option>
+                      <option value="none">ไม่มีประวัติแพ้ที่ทราบ</option>
+                    </select></label
+                  ><label class="input-label" id="hp-allergy-field" hidden
+                    >อาหาร ยา หรือสิ่งที่แพ้<textarea
+                      id="hp-allergies"
+                      rows="3"
+                      maxlength="3000"
+                      placeholder="เช่น ถั่วลิสง กุ้ง ชื่อยาที่แพ้"
+                    ></textarea>
+                  </label>
+                </div>
+                </details>
+                <details class="hp-group">
+                  <summary><span class="hp-icon">🦽</span>ข้อจำกัดและการดูแลพิเศษ<small>การเคลื่อนไหว การตั้งครรภ์ เบาหวาน</small></summary>
+                <label class="input-label"
+                  >ความพิการหรือข้อจำกัดในการทำกิจกรรม<textarea
+                    id="hp-mobility_limits"
+                    rows="3"
+                    maxlength="3000"
+                    placeholder="เช่น ใช้รถเข็น เดินไกลไม่ได้ หลีกเลี่ยงลงน้ำหนักเข่า"
+                  ></textarea>
+                </label>
+                <div class="friendly-grid three-columns">
+                  <label class="input-label"
+                    >ได้รับแจ้งว่าเป็นเบาหวานชนิดที่ 2<select
+                      id="hp-reported_type2"
+                    >
+                      <option value="">ยังไม่ระบุ</option>
+                      <option value="true">ใช่</option>
+                      <option value="false">ไม่ใช่</option>
+                    </select></label
+                  ><label class="input-label"
+                    >กำลังตั้งครรภ์<select id="hp-pregnant">
+                      <option value="">ยังไม่ระบุ</option>
+                      <option value="true">ใช่</option>
+                      <option value="false">ไม่ใช่</option>
+                    </select></label
+                  ><label class="input-label"
+                    >ต้องดูแลเป็นพิเศษหรือหลายภาวะร่วมกัน<select
+                      id="hp-complex_care"
+                    >
+                      <option value="">ยังไม่ระบุ</option>
+                      <option value="true">ใช่</option>
+                      <option value="false">ไม่ใช่</option>
+                    </select></label
+                  >
+                </div>
+                </details>
+                <details class="hp-group" id="preferences-section">
+                  <summary><span class="hp-icon">🎯</span>ความชอบและเป้าหมาย<small>อาหารที่ชอบ สิ่งที่อยากทำให้ได้</small></summary>
+                <div class="friendly-grid">
+                  <label class="input-label"
+                    >อาหารที่ชอบหรือรูปแบบการกิน<textarea
+                      id="hp-preferences"
+                      rows="3"
+                      maxlength="3000"
+                      placeholder="เช่น ชอบอาหารไทย ไม่ทานเนื้อวัว"
+                    ></textarea></label
+                  ><label class="input-label"
+                    >เป้าหมายของฉัน<textarea
+                      id="hp-goals"
+                      rows="3"
+                      maxlength="3000"
+                      placeholder="เช่น บันทึกอาหารให้สม่ำเสมอ"
+                    ></textarea>
+                  </label>
+                </div>
+                </details>
+                <p class="form-hint">
+                  รายการที่มีหลายข้อ พิมพ์แยกบรรทัดได้
+                  เว้นช่องที่ยังไม่ทราบไว้ได้
+                  การเปลี่ยนหรือลบข้อมูลจะให้คุณตรวจอีกครั้งก่อนบันทึก
+                </p>
+                <div class="profile-save-actions">
+                  <button
+                    class="primary-btn"
+                    id="save-health-profile"
+                    type="submit"
+                  >
+                    ตรวจและบันทึกข้อมูลสุขภาพ</button
+                  ><button
+                    class="secondary-btn"
+                    id="reload-health-profile"
+                    type="button"
+                  >
+                    ใช้ข้อมูลที่บันทึกไว้</button
+                  ><button
+                    class="danger-btn"
+                    id="delete-health-profile"
+                    type="button"
+                    hidden
+                  >
+                    ลบข้อมูลส่วนนี้
+                  </button>
+                </div>
+              </form>
+              <details class="profile-context">
+                <summary>ข้อมูลที่ Baobuddy ใช้ประกอบคำแนะนำ</summary>
+                <p>
+                  ดูข้อมูลล่าสุดที่คุณยืนยันแล้ว
+                  ข้อมูลน้ำหนักและส่วนสูงอาจมาจากค่าที่คุณบันทึกล่าสุด
+                </p>
+                <button
+                  class="secondary-btn"
+                  id="load-ai-profile"
+                  type="button"
+                >
+                  ตรวจข้อมูลล่าสุด
+                </button>
+                <div id="ai-profile-context" role="status"></div>
+              </details>
+            <div class="profile-help-card">
+              <span>💬</span>
+              <div>
+                <h2>ให้ Baobuddy ช่วยต่อ</h2>
+                <p>บันทึกข้อมูลก่อน แล้วเลือกสิ่งที่อยากปรึกษา</p>
+                <div class="shortcut-list">
+                  <button
+                    class="secondary-btn"
+                    data-profile-chat="ช่วยแนะนำอาหารจากข้อมูลโปรไฟล์ของฉัน"
+                  >
+                    ช่วยเลือกอาหาร</button
+                  ><button
+                    class="secondary-btn"
+                    data-profile-chat="ช่วยแนะนำกิจกรรมที่เหมาะกับข้อจำกัดของฉัน"
+                  >
+                    ช่วยเลือกกิจกรรม
+                  </button>
+                </div>
+              </div>
+            </div>
+            </section>
+          </section>
+        </div>
+      </main>
+
+      <!-- เมนูด้านล่าง แสดงเฉพาะหน้าจอมือถือ -->
+      <nav class="bottom-nav" aria-label="เมนูหลักบนโทรศัพท์">
+        <button class="active" data-page="dashboard">
+          <svg><use href="#icon-home"></use></svg><span>หน้าแรก</span>
+        </button>
+        <button data-page="food">
+          <svg><use href="#icon-food"></use></svg><span>อาหาร</span>
+        </button>
+        <button data-page="exercise">
+          <svg><use href="#icon-activity"></use></svg><span>กิจกรรม</span>
+        </button>
+        <button data-page="medicine">
+          <svg><use href="#icon-pill"></use></svg><span>ยา</span>
+        </button>
+        <button data-page="health">
+          <svg><use href="#icon-heart"></use></svg><span>สุขภาพ</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="sheet-backdrop" id="sheet-backdrop" aria-hidden="true"></div>
+    <!-- Toast ใช้แจ้งผลหลังผู้ใช้กดบันทึก -->
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      <span
+        ><svg><use href="#icon-check"></use></svg
+      ></span>
+      <p>
+        <strong id="toast-title">บันทึกแล้ว</strong
+        ><small id="toast-message">ข้อมูลได้รับการอัปเดต</small>
+      </p>
+    </div>
+
+    <button
+      class="chat-launcher"
+      data-open-chat
+      aria-label="เปิดแชต Baobuddy"
+      hidden
+    >
+      <span class="launcher-face"><svg class="bao" viewBox="0 0 64 64" aria-hidden="true"><use href="#bao-face"></use></svg></span><span>ถาม Baobuddy</span>
+    </button>
+
+    <!-- dialog รองรับคีย์บอร์ดและกัก focus ให้อยู่ในหน้าต่างโดยเบราว์เซอร์ -->
+    <dialog
+      id="manual-review-dialog"
+      class="feature-dialog"
+      aria-labelledby="manual-review-title"
+    >
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">อีกนิดเดียว</p>
+          <h2 id="manual-review-title">ตรวจรายการของคุณ</h2>
+        </div>
+        <button
+          class="close-dialog"
+          data-close="manual-review-dialog"
+          aria-label="กลับไปแก้ไข"
+        >
+          ✕
+        </button>
+      </div>
+      <div id="manual-review-details" class="manual-review-details"></div>
+      <button class="text-button" id="edit-reviewed-records" type="button">
+        แก้ไขรายละเอียด
+      </button>
+      <p id="manual-review-status" role="status"></p>
+      <label class="consent-option" id="manual-storage-option" hidden
+        ><input id="manual-storage-consent" type="checkbox" /><span
+          >ยินยอมจัดเก็บบันทึกนี้ในบริการ Baobuddy ของแอป
+          เพื่อแสดงประวัติและใช้ข้อมูลตามตัวเลือกความยินยอมของฉัน</span
+        ></label
+      >
+      <div class="review-actions">
+        <button class="secondary-btn" data-close="manual-review-dialog">
+          กลับไปแก้ไข</button
+        ><button class="primary-btn" id="confirm-manual" disabled>
+          ยืนยันบันทึก
+        </button>
+      </div>
+    </dialog>
+    <dialog
+      id="consent-dialog"
+      class="feature-dialog consent-dialog"
+      aria-labelledby="consent-title"
+    >
+      <div class="consent-hero">
+        <span class="consent-bao"
+          ><svg class="bao" viewBox="0 0 64 64" aria-hidden="true"><use href="#bao-face"></use></svg
+        ></span>
+        <h2 id="consent-title">ก่อนเริ่มใช้งาน</h2>
+        <p id="consent-sub">เลือกสิ่งที่อนุญาต เปลี่ยนได้ทุกเมื่อในหน้าบัญชี</p>
+      </div>
+      <form id="welcome-consent" class="consent-choices">
+        <label class="choice"
+          ><input id="welcome-health" type="checkbox" /><span class="choice-check" aria-hidden="true"
+            ><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9" /></svg></span
+          ><span class="choice-text"
+            ><strong>เก็บข้อมูลสุขภาพ <em class="req">จำเป็น</em></strong
+            ><small>ใช้บันทึกและดูประวัติของคุณ</small></span
+          ></label
+        >
+        <label class="choice"
+          ><input id="welcome-ai" type="checkbox" /><span class="choice-check" aria-hidden="true"
+            ><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9" /></svg></span
+          ><span class="choice-text"
+            ><strong>ให้ Baobuddy ช่วย <em class="opt">ไม่บังคับ</em></strong
+            ><small>ใช้ AI ภายนอกตอบคำถามและช่วยบันทึก</small></span
+          ></label
+        >
+        <button class="primary-btn full" type="submit" id="welcome-save" disabled>
+          เริ่มใช้งาน
+        </button>
+        <p class="consent-note" id="consent-note" hidden>
+          เอาเครื่องหมายออกเพื่อถอนความยินยอม ข้อมูลเดิมไม่ถูกลบอัตโนมัติ
+        </p>
+        <button class="text-btn" type="button" data-open-privacy>
+          อ่านประกาศความเป็นส่วนตัว
+        </button>
+      </form>
+    </dialog>
+    <dialog
+      id="account-dialog"
+      class="feature-dialog account-dialog"
+      aria-labelledby="account-title"
+    >
+      <div class="dialog-heading">
+        <h2 id="account-title">บัญชีของฉัน</h2>
+        <button
+          class="close-dialog"
+          data-close="account-dialog"
+          aria-label="ปิดบัญชี"
+        >
+          ✕
+        </button>
+      </div>
+      <div class="account-card">
+        <span class="avatar" data-avatar
+          ><svg><use href="#icon-user"></use></svg
+        ></span>
+        <div>
+          <strong data-user-name>บัญชีของฉัน</strong>
+          <p id="account-email"></p>
+        </div>
+      </div>
+      <div class="menu-list">
+        <button class="menu-row" data-open-profile>
+          <span class="menu-icon" aria-hidden="true">👤</span
+          ><span
+            ><strong>โปรไฟล์ของฉัน</strong
+            ><small>รูป ชื่อ และสีของแอป</small></span
+          ><svg><use href="#icon-chevron"></use></svg>
+        </button>
+        <button class="menu-row" id="edit-health-profile">
+          <span class="menu-icon" aria-hidden="true">💜</span
+          ><span
+            ><strong>ข้อมูลสุขภาพของฉัน</strong
+            ><small>โรคประจำตัว การแพ้ และข้อจำกัด</small></span
+          ><svg><use href="#icon-chevron"></use></svg>
+        </button>
+        <button class="menu-row" data-open-support>
+          <span class="menu-icon" aria-hidden="true">✉️</span
+          ><span
+            ><strong>ติดต่อทีม DoBao</strong
+            ><small>สอบถาม หรือใช้สิทธิเกี่ยวกับข้อมูล</small></span
+          ><svg><use href="#icon-chevron"></use></svg>
+        </button>
+        <button class="menu-row" data-open-privacy>
+          <span class="menu-icon" aria-hidden="true">🔒</span
+          ><span
+            ><strong>ความเป็นส่วนตัวและข้อกำหนด</strong
+            ><small>อ่านประกาศฉบับเต็ม</small></span
+          ><svg><use href="#icon-chevron"></use></svg>
+        </button>
+        <button class="menu-row" id="open-consent">
+          <span class="menu-icon" aria-hidden="true">✅</span
+          ><span
+            ><strong>การอนุญาตของฉัน</strong
+            ><small id="consent-summary">ข้อมูลสุขภาพ และ Baobuddy</small></span
+          ><svg><use href="#icon-chevron"></use></svg>
+        </button>
+      </div>
+      <details class="account-more">
+        <summary>ดาวน์โหลดหรือลบข้อมูลของฉัน</summary>
+        <div class="account-actions">
+          <button class="secondary-btn" id="export-data">
+            ดาวน์โหลดข้อมูลของฉัน</button
+          ><button class="danger-btn" id="delete-all">
+            ตรวจรายการเพื่อลบข้อมูลสุขภาพทั้งหมด
+          </button>
+        </div>
+        <p class="form-hint">
+          หากต้องการใช้สิทธิอื่นหรือลบบัญชี ติดต่อ
+          <span data-privacy-contact>ผู้ควบคุมข้อมูล</span>
+        </p>
+      </details>
+      <button class="secondary-btn full logout-btn" id="logout">
+        ออกจากระบบ
+      </button>
+    </dialog>
+    <dialog
+      id="privacy-dialog"
+      class="feature-dialog"
+      aria-labelledby="privacy-title"
+    >
+      <div class="dialog-heading">
+        <h2 id="privacy-title">ความเป็นส่วนตัวและข้อกำหนด</h2>
+        <button
+          class="close-dialog"
+          data-close="privacy-dialog"
+          aria-label="ปิดประกาศ"
+        >
+          ✕
+        </button>
+      </div>
+      <p class="form-hint">เวอร์ชัน 13 ตุลาคม 2569</p>
+      <h3>ใครดูแลข้อมูล</h3>
+      <p>
+        ผู้ควบคุมข้อมูล: <span id="privacy-controller"></span><br />ติดต่อ:
+        <span data-privacy-contact></span>
+      </p>
+      <h3>เราเก็บข้อมูลอะไรและเพื่ออะไร</h3>
+      <p>
+        ข้อมูลบัญชี Google ได้แก่ตัวระบุบัญชี ชื่อ และอีเมล
+        ใช้ยืนยันตัวตนและจัดการบัญชี ชื่อ–นามสกุล รูปโปรไฟล์ และสีที่คุณเลือก
+        จัดเก็บในฐานข้อมูลของแอปเพื่อปรับหน้าบัญชี รูปไม่เปิดเป็นลิงก์สาธารณะ
+        ข้อมูลสุขภาพ รวมถึงโรคประจำตัว การแพ้ และข้อจำกัดที่คุณระบุ อาหาร
+        กิจกรรม ยา ปุ่มลัดส่วนตัว และเป้าหมายที่คุณเลือกกรอก
+        ใช้แสดงประวัติและสนับสนุนกิจวัตร
+        โดยขอความยินยอมโดยชัดแจ้งแยกจากข้อกำหนดการใช้บริการ
+      </p>
+      <p>
+        เก็บประวัติการเลือกความยินยอมและ metadata ของคำขอลบ เช่น รหัสรายการ
+        จำนวนข้อมูล เวลา และสถานะ เพื่อดำเนินการตามตัวเลือกและติดตามคำขอที่ค้าง
+        ส่วนนี้ไม่เก็บข้อความอาหาร ยา หรือบทสนทนาที่ถูกลบ
+        การลบสุขภาพไม่ได้ลบบัญชี ชื่อ รูป ธีม ปุ่มลัดส่วนตัว ประวัติความยินยอม
+        และ metadata เหล่านี้ คุณลบรูปและปุ่มลัดแยกได้ในหน้าที่เกี่ยวข้อง
+        ระยะเวลาเก็บให้เป็นไปตามประกาศของผู้ควบคุมข้อมูล
+      </p>
+      <h3>Baobuddy ใช้ข้อมูลอย่างไร</h3>
+      <p>
+        หากติดต่อทีมผ่านเว็บ เราเก็บข้อความ คำตอบ และเวลาที่ติดต่อ
+        แยกตามบัญชีเพื่อดำเนินการตามคำขอ คุณลบข้อความติดต่อได้ในหน้าติดต่อทีม
+        ข้อความส่วนนี้ไม่ถูกส่งให้ Baobuddy โดยอัตโนมัติ
+      </p>
+      <p>
+        การกรอกด้วยตนเองใช้บริการ Baobuddy เพื่อตรวจรูปแบบและจัดเก็บบันทึก
+        โดยไม่เรียกโมเดลสร้างคำตอบ จึงยังต้องเชื่อมต่อบริการนี้
+        ชื่อและรูปโปรไฟล์ไม่ถูกใส่ในโปรไฟล์สุขภาพของโมเดล
+      </p>
+      <p>
+        เมื่อคุณเลือกอนุญาต
+        ข้อความและข้อมูลที่ยืนยันจะถูกส่งผ่านระบบหลังบ้านไปยังบริการ Baobuddy AI
+        ของผู้ดูแลเพื่อประมวลผล ไม่ส่งไปฝึกโมเดลผ่านฟังก์ชันนี้
+        ประวัติแชตเก็บไว้ในเบราว์เซอร์ของอุปกรณ์นี้เท่านั้น ไม่ถูกส่งขึ้นเซิร์ฟเวอร์
+        และลบได้ทุกเมื่อจากหน้าประวัติแชต
+        ร่างข้อมูลจะถูกบันทึกต่อเมื่อคุณตรวจและกดยืนยัน
+      </p>
+      <h3>ผู้รับข้อมูลและสถานที่จัดเก็บ</h3>
+      <p>
+        ผู้ให้บริการเข้าสู่ระบบผ่าน Google
+        ผู้ให้บริการฐานข้อมูลและโครงสร้างพื้นฐานคลาวด์
+        ประมวลผลข้อมูลบัญชีและข้อมูลของแอปตามหน้าที่ ส่วนบริการ AI
+        ของผู้ดูแลเก็บข้อมูลสุขภาพต้นฉบับ
+      </p>
+      <p>
+        คำถามที่พิมพ์ในแชต และข้อความที่ให้ช่วยแยกเป็นบันทึก
+        จะถูกส่งต่อผ่าน OpenRouter ไปยังผู้ให้บริการโมเดล AI (เช่น Google หรือ Alibaba Qwen)
+        ซึ่งอาจประมวลผลนอกประเทศไทย เพื่อสร้างคำตอบหรือร่างบันทึกเท่านั้น
+        ระบบตั้งให้ใช้เฉพาะผู้ให้บริการที่ไม่เก็บข้อมูลไว้ใช้ฝึกโมเดล
+        และไม่ส่งชื่อ อีเมล หรือรูปโปรไฟล์ของคุณไปด้วย
+      </p>
+      <p id="privacy-location"></p>
+      <h3>ระยะเวลาเก็บรักษา</h3>
+      <p id="privacy-retention"></p>
+      <p>
+        การลบในแอปครอบคลุมข้อมูลที่ใช้งานและสำเนาที่ซิงก์
+        ข้อมูลสำรองและบันทึกระบบเป็นไปตามนโยบายผู้ควบคุมข้อมูลและผู้ให้บริการ
+      </p>
+      <h3>สิทธิและการถอนความยินยอม</h3>
+      <button class="secondary-btn" data-open-support>
+        ติดต่อทีมผ่านเว็บไซต์ DoBao
+      </button>
+      <p>
+        คุณเลือกไม่ให้ข้อมูลสุขภาพ หรือไม่ใช้ AI ได้ แก้ไขบันทึก ดาวน์โหลดข้อมูล
+        ลบข้อมูลสุขภาพ และถอนความยินยอมในหน้าบัญชีได้
+        การถอนจะไม่กระทบการประมวลผลที่ชอบด้วยกฎหมายก่อนถอน
+        ติดต่อผู้ควบคุมข้อมูลเพื่อขอเข้าถึง แก้ไข ลบ จำกัด คัดค้าน
+        หรือใช้สิทธิอื่นตามเงื่อนไขกฎหมาย รวมถึงร้องเรียนต่อหน่วยงานกำกับดูแล
+      </p>
+      <h3>ข้อกำหนดการใช้งาน</h3>
+      <p>
+        DoBao ช่วยบันทึกและจัดการกิจวัตร คุณควรตรวจความถูกต้องก่อนยืนยัน ระบบและ
+        AI อาจผิดพลาด ไม่ใช้ผลตอบเพื่อวินิจฉัย เปลี่ยนยา
+        หรือทดแทนบุคลากรทางการแพทย์ บัญชีเป็นของผู้ใช้งานแต่ละคน
+        อย่าใช้บัญชีร่วมกัน บริการนี้ไม่ใช่บริการฉุกเฉิน
+      </p>
+      <p class="form-hint">
+        จดจำการเข้าสู่ระบบไว้ในเบราว์เซอร์ของอุปกรณ์นี้ (localStorage ของ Supabase Auth)
+        จนกว่าคุณจะกดออกจากระบบ หากใช้อุปกรณ์ร่วมกับผู้อื่น กรุณาออกจากระบบทุกครั้งหลังใช้งาน
+        และคุกกี้ที่จำเป็นสำหรับความปลอดภัยของการลบข้อมูล
+        ไม่มีคุกกี้โฆษณาในเว็บนี้ เว็บโหลดแบบอักษรจาก Google Fonts
+        ซึ่งผู้ให้บริการอาจได้รับข้อมูลการเชื่อมต่อ เช่น IP ของคุณ
+      </p>
+    </dialog>
+    <dialog
+      id="journal-dialog"
+      class="feature-dialog"
+      aria-labelledby="journal-title"
+    >
+      <div class="dialog-heading">
+        <h2 id="journal-title">บันทึกวันนี้</h2>
+        <button
+          class="close-dialog"
+          data-close="journal-dialog"
+          aria-label="ปิดการบันทึก"
+        >
+          ✕
+        </button>
+      </div>
+      <div class="journal-welcome">
+        <span class="capture-avatar"><svg class="bao" viewBox="0 0 64 64" aria-hidden="true"><use href="#bao-face"></use></svg></span>
+        <p>
+          วันนี้เป็นอย่างไรบ้าง?<br /><small
+            >เล่าเรื่องอาหาร กิจกรรม ยา หรือการนอนได้เลย</small
+          >
+        </p>
+      </div>
+      <form id="journal-form" class="journal-composer">
+        <label for="journal-text">วันนี้เป็นอย่างไรบ้าง</label
+        ><textarea
+          id="journal-text"
+          rows="4"
+          maxlength="4000"
+          placeholder="เช่น ตอนเช้ากินข้าวกับไข่พะโล้ เดิน 16.00"
+          required
+        ></textarea
+        ><button type="submit" class="primary-btn full">ส่งให้ Baobuddy</button>
+        <p id="journal-status" role="status"></p>
+      </form>
+      <button class="secondary-btn full" id="manual-record">
+        เลือกกรอกด้วยตนเอง
+      </button>
+    </dialog>
+    <dialog
+      id="draft-dialog"
+      class="feature-dialog draft-dialog"
+      aria-labelledby="draft-title"
+    >
+      <div class="dialog-heading">
+        <h2 id="draft-title">ตรวจบันทึกก่อนยืนยัน</h2>
+        <button
+          class="close-dialog"
+          data-close="draft-dialog"
+          aria-label="ยกเลิกร่าง"
+        >
+          ✕
+        </button>
+      </div>
+      <p>ตรวจชื่อ วันเวลา และปริมาณ เลือกเฉพาะรายการที่ต้องการบันทึก</p>
+      <div id="draft-items"></div>
+      <div id="draft-checks" role="status"></div>
+      <label class="consent-option" id="ai-storage-consent" hidden
+        ><input id="ai-storage-checkbox" type="checkbox" /><span
+          >ฉันยินยอมให้บริการ Baobuddy เก็บข้อมูลที่ตรวจแล้ว
+          เพื่อใช้เป็นประวัติของบัญชีนี้</span
+        ></label
+      >
+      <div class="draft-buttons">
+        <button class="secondary-btn" id="validate-draft">
+          ตรวจข้อมูลอีกครั้ง</button
+        ><button class="primary-btn" id="confirm-draft" disabled>
+          ยืนยันบันทึก
+        </button>
+      </div>
+      <p id="draft-status" role="status"></p>
+    </dialog>
+    <dialog
+      id="operation-dialog"
+      class="feature-dialog"
+      aria-labelledby="operation-title"
+    >
+      <div class="dialog-heading">
+        <h2 id="operation-title">ตรวจรายการ</h2>
+        <button
+          class="close-dialog"
+          data-close="operation-dialog"
+          aria-label="ยกเลิก"
+        >
+          ✕
+        </button>
+      </div>
+      <div id="operation-details"></div>
+      <p id="operation-status" role="status"></p>
+      <button id="confirm-operation" class="primary-btn full" disabled>
+        ยืนยัน
+      </button>
+    </dialog>
+
+    <dialog
+      id="chat-dialog"
+      class="feature-dialog chat-dialog"
+      aria-labelledby="chat-title"
+    >
+      <div class="dialog-heading chat-heading">
+        <span class="buddy-avatar"><svg class="bao" viewBox="0 0 64 64" aria-hidden="true"><use href="#bao-face"></use></svg></span>
+        <div class="chat-title">
+          <h2 id="chat-title">Baobuddy</h2>
+          <p class="chat-presence">ผู้ช่วยของคุณ</p>
+        </div>
+        <button
+          class="chip-button icon-chip"
+          id="open-chat-history"
+          aria-label="ประวัติแชต"
+          title="ประวัติแชต"
+        >
+          <svg><use href="#icon-history"></use></svg>
+        </button>
+        <button class="chip-button" id="reset-chat" title="เริ่มบทสนทนาใหม่">
+          <svg><use href="#icon-plus"></use></svg><span>แชตใหม่</span>
+        </button>
+        <button
+          class="close-dialog"
+          data-close="chat-dialog"
+          aria-label="ปิดแชต"
+        >
+          ✕
+        </button>
+      </div>
+      <section
+        class="chat-history"
+        id="chat-history"
+        aria-labelledby="chat-history-title"
+        hidden
+      >
+        <div class="chat-history-head">
+          <h3 id="chat-history-title">ประวัติแชต</h3>
+          <button class="text-button" id="close-chat-history">กลับไปแชต</button>
+        </div>
+        <p class="form-hint">
+          เก็บไว้ในอุปกรณ์นี้เท่านั้น ไม่ส่งขึ้นเซิร์ฟเวอร์ ลบได้ทุกเมื่อ
+        </p>
+        <ol class="chat-history-list" id="chat-history-list"></ol>
+        <button class="danger-btn full" id="clear-chat-history">
+          <svg><use href="#icon-trash"></use></svg>ลบประวัติแชตทั้งหมด
+        </button>
+      </section>
+      <div
+        id="chat-messages"
+        class="chat-messages"
+        role="log"
+        aria-live="polite"
+        aria-label="บทสนทนากับ Baobuddy"
+      ><div class="message bot">สวัสดีครับ ผมคือ Baobuddy 🌿 ช่วยสรุปวันนี้ ตอบเรื่องอาหาร ยา หรือสุขภาพได้ครับ อยากเริ่มจากเรื่องไหนครับ?</div></div>
+      <div class="chat-suggestions" id="chat-suggestions">
+        <button data-chat-prompt="สรุปวันนี้">📋 สรุปวันนี้</button
+        ><button data-chat-prompt="บันทึกอาหาร">🍽️ บันทึกอาหาร</button
+        ><button data-chat-prompt="ยาวันนี้">💊 ยาวันนี้</button
+        ><button data-chat-prompt="ติดตามสุขภาพ">💗 ติดตามสุขภาพ</button>
+      </div>
+      <p id="chat-status" class="chat-status" role="status"></p>
+      <div class="chat-controls">
+        <button class="text-button" id="cancel-chat" hidden>หยุดรอคำตอบ</button
+        ><button class="text-button" id="retry-chat" hidden>
+          ลองส่งอีกครั้ง
+        </button>
+      </div>
+      <form id="chat-form" class="chat-form">
+        <label class="sr-only" for="chat-input">ข้อความถึง Baobuddy</label
+        ><input
+          id="chat-input"
+          placeholder="พิมพ์ข้อความถึง Baobuddy…"
+          maxlength="4000"
+          required
+          autocomplete="off"
+        /><button class="primary-btn send-btn" type="submit" aria-label="ส่ง">
+          <svg><use href="#icon-send"></use></svg>
+        </button>
+      </form>
+      <p class="chat-disclaimer">
+        Baobuddy อาจตอบผิดได้ โปรดตรวจรายละเอียดก่อนยืนยัน
+        และไม่ใช้แทนคำแนะนำจากแพทย์
+      </p>
+    </dialog>
+    <dialog
+      id="share-dialog"
+      class="feature-dialog share-dialog"
+      aria-labelledby="share-title"
+    >
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">ส่งให้ครอบครัว แพทย์ หรือผู้ดูแล</p>
+          <h2 id="share-title">แชร์สรุปสุขภาพ</h2>
+        </div>
+        <button
+          class="close-dialog"
+          data-close="share-dialog"
+          aria-label="ปิดการแชร์"
+        >
+          ✕
+        </button>
+      </div>
+      <div class="segmented share-range" role="tablist" aria-label="ช่วงวัน">
+        <button type="button" role="tab" data-share-days="1" aria-selected="true">
+          วันที่เลือก</button
+        ><button type="button" role="tab" data-share-days="3" aria-selected="false">
+          3 วัน</button
+        ><button type="button" role="tab" data-share-days="7" aria-selected="false">
+          7 วัน</button
+        ><button type="button" role="tab" data-share-days="14" aria-selected="false">
+          14 วัน
+        </button>
+      </div>
+      <fieldset class="share-include">
+        <legend>เลือกข้อมูลที่จะแสดงในรูป</legend>
+        <label
+          ><input type="checkbox" data-share-include="glucose" checked /><span
+            >🩸 ค่าน้ำตาล</span
+          ></label
+        ><label
+          ><input type="checkbox" data-share-include="meals" checked /><span
+            >🍽️ อาหาร · kcal</span
+          ></label
+        ><label
+          ><input type="checkbox" data-share-include="activity" checked /><span
+            >🏃 กิจกรรม</span
+          ></label
+        ><label
+          ><input type="checkbox" data-share-include="meds" checked /><span
+            >💊 ยา</span
+          ></label
+        ><label
+          ><input type="checkbox" data-share-include="water" checked /><span
+            >💧 น้ำ · เป้าหมาย</span
+          ></label
+        ><label
+          ><input type="checkbox" data-share-include="profile" /><span
+            >👤 อายุ น้ำหนัก โรคประจำตัว</span
+          ></label
+        >
+      </fieldset>
+      <div class="share-preview" aria-live="polite">
+        <img id="share-image" alt="ภาพสรุปสุขภาพที่จะแชร์" hidden />
+        <p id="share-status" class="form-hint">กำลังสร้างภาพ…</p>
+      </div>
+      <p class="form-hint share-warning">
+        🔒 ภาพนี้มีข้อมูลสุขภาพของคุณ แชร์เฉพาะกับคนที่ไว้ใจเท่านั้น
+      </p>
+      <div class="share-actions">
+        <button class="primary-btn" id="share-send" type="button">
+          <svg><use href="#icon-share"></use></svg>แชร์</button
+        ><a class="secondary-btn" id="share-save" download="DoBao-สรุปสุขภาพ.png" href="#"
+          ><svg><use href="#icon-download"></use></svg>บันทึกรูป</a
+        >
+      </div>
+    </dialog>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
